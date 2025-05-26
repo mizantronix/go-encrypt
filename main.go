@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"time"
 )
 
 func main() {
@@ -19,20 +20,23 @@ func main() {
 
 	key := DeriveKey(*password)
 
+	start := time.Now()
 	if *mode == "encrypt" {
 		err := EncryptDirectory(*inputDir, *outputDir, key)
 		if err != nil {
 			log.Fatalf("Encryption failed: %v", err)
 		}
 
-		fmt.Println("Encryption complete.")
+		t := time.Now()
+		fmt.Printf("Encryption complete (%.03fs).", t.Sub(start).Seconds())
 	} else if *mode == "decrypt" {
 		err := DecryptDirectory(*inputDir, *outputDir, key)
 		if err != nil {
 			log.Fatalf("Decryption failed: %v", err)
 		}
 
-		fmt.Println("Decryption complete.")
+		t := time.Now()
+		fmt.Printf("Decryption complete (%.03fs).", t.Sub(start).Seconds())
 	} else {
 		log.Fatalf("Unknown mode: %s", *mode)
 	}
